@@ -42,7 +42,6 @@ CREATE TABLE `users` (
     FOREIGN KEY (role_id) REFERENCES roles(role_id) ON DELETE RESTRICT ON UPDATE CASCADE    -- can't delete a role if a user is assigned to it
 );
 
--- inserting data
 INSERT INTO roles (role_name) VALUES ('teacher'), ('admin');
 
 

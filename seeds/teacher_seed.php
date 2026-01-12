@@ -5,7 +5,7 @@
     // run 
     $userModel = new User();
 
-$username = 'teacher1';
+$username = 'teacher2';
 
 // Check if user already exists
 $existingUser = $userModel->getByUsername($username);
@@ -16,8 +16,8 @@ if ($existingUser) {
     $data = [
         'username' => $username,
         'password' => password_hash('admin123', PASSWORD_BCRYPT),
-        'first_name' => 'Test',
-        'last_name' => 'Teacher',
+        'first_name' => 'Test2',
+        'last_name' => 'Teacher2',
         'role_id' => 1, // 1 = teacher
         'must_reset_password' => 1,
     ];

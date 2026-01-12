@@ -15,6 +15,13 @@ password: teacher1
 the two users above was created with the php files in the /seeds folder. This is only used to start off this login part. 
 We'll move on from this and use another implementation once we have the CRUD users on the admin dashboard ui ready, to create other users. 
 
+## seed scripts
+run these in CMD instead of in the browser. 
+steps on how to do that:
+- open terminal
+- cd to the project root (CSE3101/)
+- run php seeds/teacher_seed.php
+
 ## database
 i only created the tables needed for this section, instead of running the entire database. roles and users tables are the ones i added. 
 

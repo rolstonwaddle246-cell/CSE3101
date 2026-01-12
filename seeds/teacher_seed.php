@@ -3,7 +3,6 @@
     require_once __DIR__ . '/../app/models/User.php';  
 
     // run 
-
     $userModel = new User();
 
 $username = 'teacher1';

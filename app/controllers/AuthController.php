@@ -21,6 +21,8 @@
                 $user = $this->userModel->getByUsername($username);
 
                 if ($user && password_verify($password, $user['password'])) {
+                    session_regenerate_id(true);
+                    
                     $_SESSION['user_id'] = $user['user_id'];
                     $_SESSION['username'] = $user['username'];
                     $_SESSION['role_name'] = $user['role_name'];

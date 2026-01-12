@@ -22,7 +22,7 @@ tmp/
 cache/
 
 # Ignore database backups if any
-*.sql
+# *.sql
 *.sqlite
 
 # Ignore node_modules if Node.js tools were added

@@ -10,22 +10,26 @@
 </head>
 <body>
     <div class="login-wrapper">
-        <form action="submit">
+        <form action="index.php?action=login" method="POST">
             <h1>LOGIN</h1>
 
+            <?php if (!empty($error)): ?>
+                <p class="text-danger text-center fs-5"><?= $error ?></p>
+            <?php endif; ?>
+
             <div class="input-box">
-                <input type="text" placeholder="Username">
+                <input type="text" name="username" placeholder="Username" required>
                 <i class='bx  bx-user'></i>
             </div>
 
             <div class="input-box">
-                <input type="password" id="password" placeholder="Password">
-                <i class='bx  bx-eye-slash' id="eyeIcon" style="cursor:pointer;"></i> 
+                <input type="password" id="password" name="password" placeholder="Password" required>
+                <i class='bx  bx-eye-slash toggle-password' style="cursor:pointer;"></i> 
             </div>
 
             <button type="submit" class="btn">Login</button>
             <a href="#" class="reset-link d-block text-center mt-3 text-white">Request password reset<i class='bx bx-info-circle ms-2' data-bs-toggle="tooltip"
-            data-bs-placement="top" title="Your request will be sent to an administrator. Look out for an email with further instructions."></i></a>
+            data-bs-placement="top" title="Your request will be sent to an administrator."></i></a>
         </form>
     </div>
 

@@ -26,3 +26,11 @@ CREATE TABLE `users` (
 -- inserting data
 INSERT INTO roles (role_name) VALUES ('teacher'), ('admin');
 
+
+-- POST ANNOUNCEMENTS (on dashboard)
+CREATE TABLE announcements (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    text VARCHAR(500) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+

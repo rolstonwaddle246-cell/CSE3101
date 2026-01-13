@@ -14,6 +14,10 @@
     background-color: #e6f2ff; /* light blue */
     transition: background-color 0.3s;
 }
+.table thead th {
+    background-color: #4e73df; /* dark blue */
+    color: white;
+}
 </style>
 </head>
 

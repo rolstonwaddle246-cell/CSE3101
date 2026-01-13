@@ -93,7 +93,7 @@
             </div>
 
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="index.php?action=school_years">
                     <i class="fas fa-fw fa-calendar"></i>
                     <span>School Years</span></a>
             </li>

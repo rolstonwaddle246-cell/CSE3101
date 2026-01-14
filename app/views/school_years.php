@@ -65,10 +65,10 @@
 
                     <!-- Add School Year Button -->
                     <div class="mb-3 d-flex justify-content-end">
-                        <a href="#" id="add-school-year" class="btn btn-primary btn-icon-split">
+                        <button type="button" id="add-school-year" class="btn btn-primary btn-icon-split">
                             <span class="icon text-white-50"><i class="fas fa-plus"></i></span>
                             <span class="text">Add School Year</span>
-                        </a>
+                        </button>
                     </div>
 
                     <!-- School year Table -->
@@ -89,12 +89,13 @@
 <?php
 $id = 'termsTable'; 
 $title = 'Terms';
-$columns = ['Term', 'Start Date', 'End Date', 'Status', 'Actions'];
+$columns = ['Year', 'Term', 'Start Date', 'End Date', 'Status', 'Actions'];
 
 $data = [];
 foreach ($terms as $term) {
     $data[] = [
         'id' => $term['id'], // keep id for edit/delete
+        'Year' =>  isset($term['school_year']) ? $term['school_year'] : 'Unknown',
         'Term' => $term['term_name'],
         'Start Date' => $term['start_date'],
         'End Date' => $term['end_date'],

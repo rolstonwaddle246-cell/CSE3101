@@ -53,12 +53,21 @@
         $status = $_POST['status'] ?? null;
 
         if (!$id || !$school_year || !$status) {
-            echo 'error';
+            echo json_encode(['success' => false, 'error' => 'Missing required fields']);
             return;
         }
 
-        $this->model->update($id, $school_year, $status);
-        echo 'success';
+        $updated = $this->model->update($id, $school_year, $status);
+        if ($updated) {
+            echo json_encode([
+                'success' => true,
+                'id' => $id,
+                'school_year' => $school_year,
+                'status' => $status
+            ]);
+        } else {
+            echo json_encode(['success' => false, 'error' => 'Update failed']);
+        }
     }
 }
 

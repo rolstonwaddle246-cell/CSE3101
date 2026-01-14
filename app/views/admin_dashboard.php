@@ -396,5 +396,6 @@
     </div>
 
     <?php include 'assets/js/scripts.php'; ?>
+    
 </body>
 </html>

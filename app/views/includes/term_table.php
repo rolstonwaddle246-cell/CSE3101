@@ -42,6 +42,7 @@ if (!isset($data)) {
                     <?php if (!empty($data)): ?>
                         <?php foreach($data as $row): ?>
                             <tr class="term-row" data-id="<?= $row['id'] ?>">
+                                <td class="year"><?= htmlspecialchars($row['Year'] ?? '') ?></td>
                                 <td class="editable term"><?= htmlspecialchars($row['Term']) ?></td>
                                 <td class="editable start"><?= htmlspecialchars($row['Start Date']) ?></td>
                                 <td class="editable end"><?= htmlspecialchars($row['End Date']) ?></td>

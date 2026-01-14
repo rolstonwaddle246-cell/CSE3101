@@ -1,6 +1,7 @@
 // TERMS TABLE
     //scroll to terms table on school year row click
     $(document).on("click", ".school-year-row", function (e) {
+        console.log('terms.js loaded');
         if (
             $(e.target).closest(
                 ".edit-btn, .delete-btn, button, input, select, a"
@@ -10,10 +11,13 @@
         }
 
         var yearId = $(this).data("id");
-        if (yearId) {
-            window.location.href =
-                "index.php?action=school_years&year_id=" + yearId;
-        }
+        var yearText = $(this).find('td.year').text();
+        window.selectedYearId = yearId;
+        window.selectedYearText = yearText;
+        
+        window.location.href = "index.php?action=school_years&year_id=" + yearId;
+
+        console.log('Selected year:', yearText, 'ID:', yearId);
     });
 
 
@@ -34,9 +38,10 @@ $(document).ready(function() {
         e.stopPropagation();
 
         var newRow = `<tr>
+            <td class="year">${window.selectedYearText}</td>
             <td class="editable term"><input type="text" class="form-control form-control-sm term-input" placeholder="Term Name"></td>
-            <td class="editable start"><input type="date" class="form-control form-control-sm start-input"></td>
-            <td class="editable end"><input type="date" class="form-control form-control-sm end-input"></td>
+            <td class="editable start"><input type="date" class="form-control form-control-sm start-input w-100"></td>
+            <td class="editable end"><input type="date" class="form-control form-control-sm end-input w-100"></td>
             <td class="editable status">
                 <select class="form-control form-control-sm status-input">
                     <option value="Active">Active</option>
@@ -76,6 +81,7 @@ $(document).ready(function() {
 
             // Update row to normal display
             row.empty(); // clear the row completely
+            row.append(`<td class="year">${school_year_id}</td>`);
             row.append(`<td class="editable term">${term_name}</td>`);
             row.append(`<td class="editable start">${start_date}</td>`);
             row.append(`<td class="editable end">${end_date}</td>`);
@@ -131,7 +137,7 @@ $(document).ready(function() {
         e.stopPropagation();
 
         var row = $(this).closest('tr');
-        row.find('.editable').each(function() {
+        row.find('.editable').not('.year').each(function() {
             var value = $(this).text();
             $(this).data('original', value);
 
@@ -145,9 +151,9 @@ $(document).ready(function() {
             } else if ($(this).hasClass('term')) {
                 $(this).html('<input type="text" class="form-control form-control-sm edit-term" value="'+value+'">');
             } else if ($(this).hasClass('start')) {
-                $(this).html('<input type="date" class="form-control form-control-sm edit-start" value="'+value+'">');
+                $(this).html('<input type="date" class="form-control form-control-sm edit-start w-100" value="'+value+'">');
             } else if ($(this).hasClass('end')) {
-                $(this).html('<input type="date" class="form-control form-control-sm edit-end" value="'+value+'">');
+                $(this).html('<input type="date" class="form-control form-control-sm edit-end w-100" value="'+value+'">');
             }
         });
 
@@ -189,6 +195,7 @@ console.log('Status select exists?', row.find('select.edit-status').length);
 
         $.post('index.php?action=update_term', { id, term_name, start_date, end_date, status }, function(response) {
             row.empty();
+            row.append(`<td class="year">${window.selectedYearText}</td>`);
             row.append(`<td class="editable term">${term_name}</td>`);
             row.append(`<td class="editable start">${start_date}</td>`);
             row.append(`<td class="editable end">${end_date}</td>`);
@@ -230,6 +237,8 @@ console.log('Status select exists?', row.find('select.edit-status').length);
                                 <span class="icon text-white-50"><i class="fas fa-trash"></i></span>
                                 <span class="text">Delete</span></button>`);
     });
+
+
 
 });
 

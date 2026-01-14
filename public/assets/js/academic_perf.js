@@ -1,10 +1,14 @@
 // Set new default font family and font color to mimic Bootstrap's default styling
+$(document).ready(function() {
+
+
 Chart.defaults.global.defaultFontFamily =
     'Nunito, -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.global.defaultFontColor = "#858796";
 
 // Area Chart - Academic Performance Overview
 var ctx = document.getElementById("myAreaChart");
+if (ctx) {
 var myLineChart = new Chart(ctx, {
     type: "line",
     data: {
@@ -108,3 +112,8 @@ var myLineChart = new Chart(ctx, {
         },
     },
 });
+    } else {
+        console.warn('Canvas #myAreaChart not found. Skipping chart initialization.');
+    }
+});
+

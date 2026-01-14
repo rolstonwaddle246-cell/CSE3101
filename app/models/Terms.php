@@ -13,7 +13,11 @@ class Term extends Model {
 
     public function getBySchoolYear($schoolYearId) {
         $stmt = $this->db->prepare(
-            "SELECT * FROM terms WHERE school_year_id = :school_year_id ORDER BY start_date ASC"
+            "SELECT t.*, s.school_year 
+            FROM terms t
+            JOIN school_years s ON t.school_year_id = s.id
+            WHERE t.school_year_id = :school_year_id
+            ORDER BY t.start_date ASC"
         );
         $stmt->execute(['school_year_id' => $schoolYearId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -59,5 +63,7 @@ class Term extends Model {
         $stmt->execute(['id' => $id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+
 }
 ?>

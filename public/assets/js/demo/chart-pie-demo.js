@@ -1,9 +1,11 @@
 // Set new default font family and font color to mimic Bootstrap's default styling
+$(document).ready(function() {
 Chart.defaults.global.defaultFontFamily = 'Nunito, -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.global.defaultFontColor = '#858796';
 
 // Pie/Doughnut Chart Example
 var ctx = document.getElementById("myPieChart");
+if (ctx) {
 var myPieChart = new Chart(ctx, {
   type: 'doughnut', 
   data: {
@@ -37,6 +39,9 @@ var myPieChart = new Chart(ctx, {
     cutoutPercentage: 70, // 0 for pie, 80 for doughnut
   },
 });
+} else {
+        console.warn('Canvas #myPieChart not found, skipping chart initialization.');
+    }
 
 Chart.plugins.register({
   beforeDraw: function(chart) {
@@ -66,4 +71,5 @@ Chart.plugins.register({
 
     ctx.restore();
   }
+});
 });

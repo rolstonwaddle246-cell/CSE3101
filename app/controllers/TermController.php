@@ -82,6 +82,8 @@ class TermController extends Controller {
             echo json_encode(['success' => true]);
         }
     }
+
+
 }
 
 ?>

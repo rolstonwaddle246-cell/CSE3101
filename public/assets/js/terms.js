@@ -81,7 +81,7 @@ $(document).ready(function() {
 
             // Update row to normal display
             row.empty(); // clear the row completely
-            row.append(`<td class="year">${school_year_id}</td>`);
+            row.append(`<td class="year">${window.selectedYearText}</td>`);
             row.append(`<td class="editable term">${term_name}</td>`);
             row.append(`<td class="editable start">${start_date}</td>`);
             row.append(`<td class="editable end">${end_date}</td>`);

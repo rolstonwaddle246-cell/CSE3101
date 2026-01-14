@@ -10,9 +10,10 @@
 .btn-icon-split {
     margin-right: 15px;
 }
-#dataTable tbody tr:hover {
+#schoolYearsTable tbody tr:hover, #termsTable tbody tr:hover {
     background-color: #e6f2ff; /* light blue */
     transition: background-color 0.3s;
+    cursor: pointer
 }
 .table thead th {
     background-color: #4e73df; /* dark blue */
@@ -48,6 +49,7 @@
                     <p class="mb-4">See all school years at a glance.</p>
 
                     <?php
+                    $id = 'schoolYearsTable'; 
                     $title = 'School Years';
                     $columns = ['School Year', 'Status', 'Actions'];
 
@@ -69,14 +71,49 @@
                         </a>
                     </div>
 
-                    <!-- Table -->
+                    <!-- School year Table -->
                     <?php require __DIR__ . '/includes/table.php'; ?>
 
-                    <!-- Hidden Form for Adding New School Year -->
-                    <!-- <form id="addSchoolYearForm" method="POST" action="index.php?action=add_school_year" style="display:none;">
-                        <input type="hidden" name="school_year" id="newSchoolYear">
-                        <input type="hidden" name="status" id="newStatus">
-                    </form> -->
+
+                    <!-- TERMS Table -->
+                    <?php if (!empty($selectedYear)): ?>
+                    <hr class="mt-5">
+                    <h1 class="h4 text-gray-800 terms-heading">
+                        Terms for School Year: 
+                            <span class="text-info">
+                                <?= isset($selectedYear['school_year']) ? htmlspecialchars($selectedYear['school_year']) : '' ?>
+                            </span>
+                    </h1>
+                    <?php endif; ?>
+
+<?php
+$id = 'termsTable'; 
+$title = 'Terms';
+$columns = ['Term', 'Start Date', 'End Date', 'Status', 'Actions'];
+
+$data = [];
+foreach ($terms as $term) {
+    $data[] = [
+        'id' => $term['id'], // keep id for edit/delete
+        'Term' => $term['term_name'],
+        'Start Date' => $term['start_date'],
+        'End Date' => $term['end_date'],
+        'Status' => $term['status'],
+    ];
+}
+?>
+
+<!-- Add Term Button -->
+<div class="mb-3 d-flex justify-content-end">
+    <a href="#" id="add-term" class="btn btn-primary btn-icon-split">
+        <span class="icon text-white-50"><i class="fas fa-plus"></i></span>
+        <span class="text">Add Term</span>
+    </a>
+</div>
+
+<!-- Terms Table -->
+<?php require __DIR__ . '/includes/term_table.php'; ?>
+
 
                 </div>
                 <!-- /.container-fluid -->
@@ -121,108 +158,14 @@
         </div>
     </div>
 
+<script>
+    window.selectedYearId = <?= $selectedYearId ?? 'null' ?>;
+    window.selectedYearText = "<?= $selectedYear['school_year'] ?? '' ?>";
+
+</script>
+
+    <!-- JS -->
     <?php include 'assets/js/scripts.php'; ?>
 
-    <script>
-    $(document).ready(function() {
-
-        // Add new row
-        $(document).on('click', '#add-school-year', function(e) {
-            e.preventDefault();
-
-            var newRow = `<tr>
-                <td class="editable year"><input type="text" class="form-control form-control-sm year-input" placeholder="YYYY/YYYY"></td>
-                <td class="editable status">
-                    <select class="form-control form-control-sm status-input">
-                        <option value="Active">Active</option>
-                        <option value="Inactive">Inactive</option>
-                    </select>
-                </td>
-                <td>
-                    <button class="btn btn-success btn-sm save-new">Save</button>
-                    <button class="btn btn-secondary btn-sm cancel-new">Cancel</button>
-                </td>
-            </tr>`;
-
-            var tbody = $('#dataTable tbody');
-            tbody.find('td.text-center').closest('tr').remove();
-            tbody.prepend(newRow);
-        });
-
-        // Save new school year to DB
-        $(document).on('click', '.save-new', function(e) {
-            e.preventDefault();
-            var row = $(this).closest('tr');
-            var school_year = row.find('.year-input').val();
-            var status = row.find('.status-input').val();
-
-            if (!school_year) { alert('Enter a school year'); return; }
-
-            $.post('index.php?action=store_school_year', {school_year, status}, function() {
-                location.reload();
-            });
-        });
-
-        // Cancel adding new row
-        $(document).on('click', '.cancel-new', function() {
-            $(this).closest('tr').remove();
-            if ($('#dataTable tbody tr').length === 0) {
-                $('#dataTable tbody').append('<tr><td colspan="3" class="text-center">No data available</td></tr>');
-            }
-        });
-
-        // Delete school year
-        $(document).on('click', '.delete-btn', function() {
-            if (!confirm('Are you sure you want to delete this school year?')) return;
-            var id = $(this).data('id');
-
-            $.post('index.php?action=delete_school_year', {id}, function() {
-                location.reload();
-            });
-        });
-
-        // Edit school year
-        $(document).on('click', '.edit-btn', function() {
-            var row = $(this).closest('tr');
-            row.find('.editable').each(function() {
-                var value = $(this).text();
-                $(this).data('original', value);
-                if ($(this).hasClass('status')) {
-                    $(this).html(`<select class="form-control form-control-sm edit-input">
-                                    <option value="Active" ${value==='Active'?'selected':''}>Active</option>
-                                    <option value="Inactive" ${value==='Inactive'?'selected':''}>Inactive</option>
-                                  </select>`);
-                } else {
-                    $(this).html('<input type="text" class="form-control form-control-sm edit-input" value="'+value+'">');
-                }
-            });
-
-            $(this).replaceWith(`<a href="#" class="btn btn-primary btn-icon-split btn-sm save-btn" data-id="${$(this).data('id')}">
-                                    <span class="icon text-white-50"><i class="fas fa-check"></i></span>
-                                    <span class="text">Save</span></a>`);
-            row.find('.delete-btn').replaceWith(`<a href="#" class="btn btn-secondary btn-icon-split btn-sm cancel-btn">
-                                                    <span class="icon text-white-50"><i class="fas fa-times"></i></span>
-                                                    <span class="text">Cancel</span></a>`);
-        });
-
-        // Save edit
-        $(document).on('click', '.save-btn', function() {
-            var row = $(this).closest('tr');
-            var id = $(this).data('id');
-            var school_year = row.find('input').val();
-            var status = row.find('select').val();
-
-            $.post('index.php?action=update_school_year', {id, school_year, status}, function() {
-                location.reload();
-            });
-        });
-
-        // Cancel edit
-        $(document).on('click', '.cancel-btn', function() {
-            location.reload();
-        });
-
-    });
-    </script>
 </body>
 </html>

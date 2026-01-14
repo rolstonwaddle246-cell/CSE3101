@@ -16,6 +16,7 @@ class SchoolYear extends Model {
     public function create($school_year, $status) {
         $stmt = $this->db->prepare("INSERT INTO school_years (school_year, status) VALUES (:school_year, :status)");
         return $stmt->execute(['school_year' => $school_year, 'status' => $status]);
+        return $this->db->lastInsertId(); // <-- returns new ID
     }
 
     public function update($id, $school_year, $status) {
@@ -26,6 +27,12 @@ class SchoolYear extends Model {
     public function delete($id) {
         $stmt = $this->db->prepare("DELETE FROM school_years WHERE id = :id");
         return $stmt->execute(['id' => $id]);
+    }
+
+    public function getById($id) {
+        $stmt = $this->db->prepare("SELECT * FROM school_years WHERE id = :id");
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch();
     }
 }
 ?>

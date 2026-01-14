@@ -4,7 +4,7 @@ if (!isset($id)) {
 }
 
 if (!isset($title)) {
-    $title = 'Table';
+    $title = 'Terms Table';
 }
 
 if (!isset($columns)) {
@@ -16,7 +16,6 @@ if (!isset($data)) {
 }
 ?>
 
-
 <div class="card shadow mb-4">
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary"><?= htmlspecialchars($title) ?></h6>
@@ -26,14 +25,12 @@ if (!isset($data)) {
             <table class="table table-bordered" id="<?= htmlspecialchars($id) ?>" width="100%" cellspacing="0">
                 <thead>
                     <tr>
-                        <!-- Table Headers -->
                         <?php foreach($columns as $col): ?>
                             <th><?= htmlspecialchars($col) ?></th>
                         <?php endforeach; ?>
                     </tr>
                 </thead>
                 <tfoot>
-                    <!-- Table Headers -->
                     <tr>
                         <?php foreach($columns as $col): ?>
                             <th><?= htmlspecialchars($col) ?></th>
@@ -41,19 +38,20 @@ if (!isset($data)) {
                     </tr>
                 </tfoot>
 
-                <!-- table body -->
                 <tbody>
                     <?php if (!empty($data)): ?>
                         <?php foreach($data as $row): ?>
-                            <tr class="school-year-row" data-id="<?= $row['id'] ?>">
-                                <td class="editable year"><?= htmlspecialchars($row['School Year']) ?></td>
+                            <tr class="term-row" data-id="<?= $row['id'] ?>">
+                                <td class="editable term"><?= htmlspecialchars($row['Term']) ?></td>
+                                <td class="editable start"><?= htmlspecialchars($row['Start Date']) ?></td>
+                                <td class="editable end"><?= htmlspecialchars($row['End Date']) ?></td>
                                 <td class="editable status"><?= htmlspecialchars($row['Status']) ?></td>
                                 <td>
-                                    <button href="#" class="btn btn-info btn-icon-split btn-sm edit-btn" data-id="<?= $row['id'] ?>">
+                                    <button class="btn btn-info btn-icon-split btn-sm edit-btn" data-id="<?= $row['id'] ?>">
                                         <span class="icon text-white-50"><i class="fas fa-edit"></i></span>
                                         <span class="text">Edit</span>
                                     </button>
-                                    <button href="#" class="btn btn-danger btn-icon-split btn-sm delete-btn" data-id="<?= $row['id'] ?>">
+                                    <button class="btn btn-danger btn-icon-split btn-sm delete-btn" data-id="<?= $row['id'] ?>">
                                         <span class="icon text-white-50"><i class="fas fa-trash"></i></span>
                                         <span class="text">Delete</span>
                                     </button>
@@ -70,5 +68,3 @@ if (!isset($data)) {
         </div>
     </div>
 </div>
-
-

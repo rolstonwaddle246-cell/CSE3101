@@ -1,0 +1,5 @@
+RewriteEngine On
+
+# Redirect everything to the public folder
+RewriteCond %{REQUEST_URI} !^/cse3101/public/
+RewriteRule ^(.*)$ public/$1 [L]

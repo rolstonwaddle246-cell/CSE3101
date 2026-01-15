@@ -1,0 +1,59 @@
+-- User and User Role Management
+
+CREATE DATABASE sms;
+USE sms;
+
+-- creating tables
+CREATE TABLE `roles` (
+    `role_id` INT AUTO_INCREMENT PRIMARY KEY,
+    `role_name` VARCHAR(50) NOT NULL UNIQUE,  -- teacher/admin
+    `is_active` TINYINT(1) DEFAULT 1  -- 1 for active, 0 for inactive. disable/reassign role instead of deleting them directly.
+);
+
+CREATE TABLE `users` (
+    `user_id` INT AUTO_INCREMENT PRIMARY KEY,
+    `username` VARCHAR(50) NOT NULL UNIQUE,
+    `password` VARCHAR(255) NOT NULL,
+    `first_name` VARCHAR(50) NOT NULL,
+    `last_name` VARCHAR(50) NOT NULL,
+    `role_id` INT NOT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `must_reset_password` TINYINT(1) DEFAULT 1, -- 1 if user must reset password on first login, 0 otherwise
+    FOREIGN KEY (role_id) REFERENCES roles(role_id) ON DELETE RESTRICT ON UPDATE CASCADE    -- can't delete a role if a user is assigned to it
+);
+
+-- inserting data
+INSERT INTO roles (role_name) VALUES ('teacher'), ('admin');
+
+
+-- POST ANNOUNCEMENTS (on dashboard)
+CREATE TABLE announcements (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    text VARCHAR(500) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- SCHOOL YEARS 
+CREATE TABLE school_years (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    school_year VARCHAR(20) NOT NULL,
+    status ENUM('Active','Inactive') NOT NULL DEFAULT 'Inactive',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- TERMS
+CREATE TABLE terms (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    school_year_id INT NOT NULL,
+    term_name VARCHAR(100) NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    status ENUM('Active','Inactive') NOT NULL DEFAULT 'Inactive',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_terms_school_year
+        FOREIGN KEY (school_year_id)
+        REFERENCES school_years(id)
+        ON DELETE CASCADE
+);

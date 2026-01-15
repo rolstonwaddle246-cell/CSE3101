@@ -34,3 +34,26 @@ CREATE TABLE announcements (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
+-- SCHOOL YEARS 
+CREATE TABLE school_years (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    school_year VARCHAR(20) NOT NULL,
+    status ENUM('Active','Inactive') NOT NULL DEFAULT 'Inactive',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- TERMS
+CREATE TABLE terms (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    school_year_id INT NOT NULL,
+    term_name VARCHAR(100) NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    status ENUM('Active','Inactive') NOT NULL DEFAULT 'Inactive',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_terms_school_year
+        FOREIGN KEY (school_year_id)
+        REFERENCES school_years(id)
+        ON DELETE CASCADE
+);

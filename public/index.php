@@ -7,11 +7,20 @@ if (session_status() === PHP_SESSION_NONE) {
 require_once __DIR__ . '/../app/controllers/Controller.php';
 require_once __DIR__ . '/../app/controllers/AuthController.php';
 require_once __DIR__ . '/../app/controllers/AnnouncementController.php';
+require_once __DIR__ . '/../app/controllers/SchoolYearController.php';
+require_once __DIR__ . '/../app/controllers/TermController.php';
+
 // echo "SMS database connected successfully.";
 
+    $controller = new SchoolYearController();
+
     $action = $_GET['action'] ?? 'login';
+
     $authController = new AuthController();
+
     $announcementController = new AnnouncementController();
+
+    $termController = new TermController();
 
     switch ($action) {
         case 'login':
@@ -63,6 +72,34 @@ require_once __DIR__ . '/../app/controllers/AnnouncementController.php';
             require_once __DIR__ . '/../app/views/teacher_dashboard.php';
             break;
 
+        
+        // SCHOOL YEARS
+        case 'school_years':
+        $controller->index();
+        break;
+    case 'store_school_year':
+        $controller->store();
+        break;
+    case 'update_school_year':
+        $controller->update();
+        break;
+    case 'delete_school_year':
+        $controller->delete();
+        break;
+
+        // TERMS
+    case 'store_term':
+        $termController->store();
+        break;
+    case 'update_term':
+        $termController->update();
+        break;
+
+    case 'delete_term':
+        $termController->delete();
+        break;
+
+// DEFAULT CASE
         default:
             echo "Page not found";
             break;

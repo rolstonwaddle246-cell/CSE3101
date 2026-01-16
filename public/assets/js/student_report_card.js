@@ -319,4 +319,53 @@ $('#exportBtn').on('click', function() {
 
     console.log('CSV download triggered');
 });
+
+// export pdf
+$('#exportPDF').on('click', function(e) {
+    e.preventDefault();
+    const reportData = $('#reportContainer').data('report');
+    if (!reportData) { alert('Generate a report first.'); return; }
+
+    // Print only the report container
+    let printContents = document.getElementById('reportContainer').innerHTML;
+    let originalContents = document.body.innerHTML;
+
+    document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
+});
+
+// Export Word
+$('#exportWord').on('click', function(e) {
+    e.preventDefault();
+    const reportData = $('#reportContainer').data('report');
+    if (!reportData) { alert('Generate a report first.'); return; }
+
+    let htmlContent = document.getElementById('reportContainer').innerHTML;
+    let blob = new Blob(['\ufeff', htmlContent], { type: 'application/msword' });
+    let url = URL.createObjectURL(blob);
+    let link = document.createElement('a');
+    link.href = url;
+    link.download = `${reportData.student.first_name}_${reportData.student.last_name}_Report.doc`;
+    link.click();
+});
+
+// Export Excel
+$('#exportExcel').on('click', function(e) {
+    e.preventDefault();
+    const reportData = $('#reportContainer').data('report');
+    if (!reportData) { alert('Generate a report first.'); return; }
+
+    let htmlContent = document.getElementById('reportContainer').innerHTML;
+
+    // Wrap in table tag for Excel
+    let excelFile = `<table>${htmlContent}</table>`;
+
+    let blob = new Blob([excelFile], { type: 'application/vnd.ms-excel' });
+    let url = URL.createObjectURL(blob);
+    let link = document.createElement('a');
+    link.href = url;
+    link.download = `${reportData.student.first_name}_${reportData.student.last_name}_Report.xls`;
+    link.click();
+});
 });

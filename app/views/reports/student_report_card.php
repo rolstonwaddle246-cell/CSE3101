@@ -63,7 +63,16 @@ padding-right: 12px;
                     <h1 class="h3 text-gray-800 mb-3 ml-3">Student Report Card</h1>
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <p class="mb-4 ml-3">Some phrase here.</p>
-                        <button id="exportBtn" class="btn btn-dark mr-5">Export</button>
+                        <div class="dropdown ml-auto mr-5">
+                            <button class="btn btn-dark dropdown-toggle" type="button" id="exportDropdownBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Export
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="exportDropdownBtn">
+                                <a class="dropdown-item" href="#" id="exportPDF">Print to PDF</a>
+                                <a class="dropdown-item" href="#" id="exportWord">Print to Word</a>
+                                <a class="dropdown-item" href="#" id="exportExcel">Print to Excel</a>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- search bar -->

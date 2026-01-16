@@ -38,24 +38,24 @@ class Term extends Model {
         return $this->db->lastInsertId(); // return the new term ID
     }
 
-    public function update($id, $term_name, $start_date, $end_date, $status) {
+    public function update($term_id, $term_name, $start_date, $end_date, $status) {
         $stmt = $this->db->prepare("
             UPDATE terms 
             SET term_name = :term_name, start_date = :start_date, end_date = :end_date, status = :status 
-            WHERE id = :id
+            WHERE term_id = :term_id
         ");
         return $stmt->execute([
             'term_name' => $term_name,
             'start_date' => $start_date,
             'end_date' => $end_date,
             'status' => $status,
-            'id' => $id
+            'term_id' => $term_id
         ]);
     }
 
-    public function delete($id) {
+    public function delete($term_id) {
         $stmt = $this->db->prepare("DELETE FROM terms WHERE id = :id");
-        return $stmt->execute(['id' => $id]);
+        return $stmt->execute(['term_id' => $term_id]);
     }
 
     public function getById($id) {
@@ -64,6 +64,18 @@ class Term extends Model {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-
+    // TERM DROPDOWN
+    // Get active terms for a specific school year
+    public function getTermsBySchoolYear($school_year_id) {
+        $stmt = $this->db->prepare("SELECT term_id, school_year_id, term_name, status
+            FROM terms
+            WHERE school_year_id = :school_year_id
+            ORDER BY 
+            CASE WHEN status='Active' THEN 0 ELSE 1 END,
+            term_name ASC");
+        $stmt->bindParam(':school_year_id', $school_year_id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 ?>

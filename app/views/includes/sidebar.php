@@ -97,12 +97,7 @@
                     <i class="fas fa-fw fa-calendar"></i>
                     <span>School Years & Terms</span></a>
             </li>
-            <!-- <li class="nav-item">
-                <a class="nav-link" href="charts.html">
-                    <i class="fas fa-fw fa-hourglass-half"></i>
-                    <span>Terms</span></a>
-            </li> -->
-            <!-- Divider -->
+
             <hr class="sidebar-divider">
 
 
@@ -125,7 +120,7 @@
             </div>
 
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="index.php?action=student_report_card">
                     <i class="fas fa-fw fa-file-alt"></i>
                     <span>Student Report Cards</span></a>
             </li>

@@ -1,5 +1,5 @@
 # Student Report Card page
-## To work on later:
+### To work on later:
 - right now i'm hardcoding 'subject_grade' and 'remarks' in the report_card_details table, whenever i create a record for this table. That will have to change when the Score page (where teachers enter scores) is built. The score pg is suppose to automatically calculate the grade and remarks based on the grading system (i have a table for grading system too). 
 - make the page responsive
 

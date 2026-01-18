@@ -19,3 +19,8 @@
 
     <!-- student report card -->
     <link href="assets/css/student-report-card.css" rel="stylesheet">
+
+<?php
+require_once __DIR__ . '/../../../config/Database.php'; 
+include __DIR__ . '/dashboard_counts.php'; 
+?>

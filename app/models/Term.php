@@ -6,7 +6,7 @@ class Term extends Model {
 
     // Fetch all terms (optional: for a specific school year)
     public function getAll($schoolYearId) {
-        $stmt = $this->db->query("SELECT * FROM terms WHERE school_year_id = :school_year_id ORDER BY start_date ASC");
+        $stmt = $this->db->prepare("SELECT * FROM terms WHERE school_year_id = :school_year_id ORDER BY start_date ASC");
         $stmt->execute(['school_year_id' => $schoolYearId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

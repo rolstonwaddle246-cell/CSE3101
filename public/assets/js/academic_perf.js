@@ -2,12 +2,12 @@
 $(document).ready(function() {
 
 
-Chart.defaults.global.defaultFontFamily =
-    'Nunito, -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
-Chart.defaults.global.defaultFontColor = "#858796";
+Chart.defaults.font.family = 'Nunito, -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+Chart.defaults.color = '#858796';
 
 // Area Chart - Academic Performance Overview
 var ctx = document.getElementById("myAreaChart");
+
 if (ctx) {
 var myLineChart = new Chart(ctx, {
     type: "line",

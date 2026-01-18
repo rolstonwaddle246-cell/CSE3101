@@ -1,0 +1,178 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* login */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #141E30;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #243B55, #141E30);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #243B55, #141E30); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.login-wrapper {
+    width: 420px;
+    color: white;
+    border-radius: 10px;
+    padding: 30px 40px;
+    /* From https://css.glass */
+    background: rgba(197, 197, 197, 0.22);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(8.8px);
+    -webkit-backdrop-filter: blur(8.8px);
+    border: 1px solid rgba(197, 197, 197, 0.29);
+}
+
+.login-wrapper h1 {
+    position: relative;
+    padding-top: 20px;
+    font-size: 36px;
+    text-align: center;
+}
+
+.login-wrapper h1::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 130px;
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+}
+
+.login-wrapper .reset-link{
+    text-decoration: none;
+}
+.login-wrapper .reset-link:hover{
+    text-decoration: underline;
+}
+
+.bx-info-circle {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.bx-info-circle:hover {
+    color: #ffffff;
+}
+
+.login-wrapper .reset-msg {
+    color: #eff0f1;
+    margin: 15px auto;
+    text-align: center;
+    width: 300px;
+}
+
+.login-wrapper .input-box {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    margin: 30px 0;
+}
+
+.input-box input {
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    font-size: 16px;
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.333);
+    padding: 20px 45px 20px 20px;
+}
+
+.input-box input::placeholder {
+    color: rgba(255, 255, 255, 0.333);
+}
+
+.input-box input:focus {
+    border-color: rgb(225, 223, 223);
+}
+
+.input-box i {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: rgba(255, 255, 255, 0.333);
+}
+
+.input-box input:focus + i {
+    color: rgb(225, 223, 223);
+}
+
+#eyeIcon:hover {
+    color: rgb(225, 223, 223);
+}
+
+.login-wrapper .btn {
+    width: 100%;
+    height: 45px;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    background-color: #6b85d7;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.login-wrapper .btn:hover {
+    background-color: #758FE1;
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.333);
+    cursor: pointer;
+}
+
+/* responsive login */
+@media (max-width: 480px) {
+    .login-wrapper {
+        width: 90%;         
+        padding: 20px 20px;   
+    }
+
+    .login-wrapper h1 {
+        font-size: 28px;      
+        padding-top: 15px;
+    }
+
+    .login-wrapper h1::before {
+        width: 80px;         
+        height: 3px;
+        top: -8px;
+    }
+
+    .input-box {
+        height: 45px;         
+        margin: 20px 0;
+    }
+
+    .input-box input {
+        padding: 15px 40px 15px 15px; 
+        font-size: 14px;
+        border-radius: 40px;
+    }
+
+    .input-box i {
+        font-size: 18px;
+        right: 15px;
+    }
+
+    .login-wrapper .btn {
+        height: 40px;
+        font-size: 14px;
+        border-radius: 40px;
+    }
+}

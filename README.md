@@ -1,7 +1,4 @@
-# dashboards
-i only worked on the admin dashboard. 
+# Admin and Teacher dashboards
+Both dashboards functions. If the admin makes changes, those changes are reflected on the teacher's dashboard. The 4 cards at the top are dynamically loaded from the db. 
 
-## database
-i added a table called anouncements. 
 
-admin dashboard isnt complete, still needs some work. but i wanna start on the other pages like Academics and so

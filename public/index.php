@@ -18,6 +18,11 @@ require_once __DIR__ . '/../app/controllers/AveragePerformanceController.php';
 require_once __DIR__ . '/../app/controllers/SettingController.php';
 require_once __DIR__ . '/../app/controllers/SyllabusProgressController.php';
 require_once __DIR__ . '/../app/controllers/UserController.php';
+require_once __DIR__ . '/../app/controllers/GradesController.php';
+require_once __DIR__ . '/../app/controllers/ClassesController.php';
+require_once __DIR__ . '/../app/controllers/SubjectController.php';
+require_once __DIR__ . '/../app/controllers/AssignTeachersController.php';
+require_once __DIR__ . '/../app/controllers/ScoreController.php';
 
 // Handle AJAX inline edit first
 if (isset($_GET['action']) && $_GET['action'] === 'update_setting') {
@@ -45,15 +50,9 @@ if (isset($_GET['action']) && $_GET['action'] === 'update_syllabus') {
 
 // echo "SMS database connected successfully.";
 
-$action = $_GET['action'] ?? null;
-if ($action === null) {
-    if (!isset($_SESSION['user_id'])) {
-        header("Location: index.php?action=login");
-        exit();
-    }
-    header("Location: index.php?action=admin_dashboard");
-    exit();
-}
+    $controller = new SchoolYearController();
+
+    $action = $_GET['action'] ?? 'login';
 
 $authController = new AuthController();
 $announcementController = new AnnouncementController();
@@ -62,6 +61,11 @@ $termController = new TermController();
 $reportCardController = new ReportCardController();
 $averagePerformanceController = new AveragePerformanceController();
 $userController = new UserController();
+$gradesController = new GradesController();
+$classesController = new ClassesController();
+$subjectController = new SubjectController();
+$assignTeachersController = new AssignTeachersController();
+$scoreController = new ScoreController();
 
 switch ($action) {
     case 'login':
@@ -224,6 +228,88 @@ case 'average_performance':
     break;
 case 'average_performance_data':
     $averagePerformanceController->fetchData();
+    break;
+
+// GRADES MANAGEMENT
+case 'grades':
+    $gradesController->index();
+    break;
+case 'store_grade':
+    $gradesController->store();
+    break;
+case 'update_grade':
+    $gradesController->update();
+    break;
+case 'delete_grade':
+    $gradesController->delete();
+    break;
+
+// CLASSES MANAGEMENT
+case 'classes':
+    $classesController->index();
+    break;
+case 'store_class':
+    $classesController->store();
+    break;
+case 'update_class':
+    $classesController->update();
+    break;
+case 'delete_class':
+    $classesController->delete();
+    break;
+
+// SUBJECTS MANAGEMENT
+case 'subjects':
+    $subjectController->index();
+    break;
+case 'store_subject':
+    $subjectController->store();
+    break;
+case 'update_subject':
+    $subjectController->update();
+    break;
+case 'delete_subject':
+    $subjectController->delete();
+    break;
+
+// TEACHER ASSIGNMENT
+case 'assign_teachers':
+    $assignTeachersController->index();
+    break;
+case 'store_assign_teacher':
+    $assignTeachersController->store();
+    break;
+case 'update_assign_teacher':
+    $assignTeachersController->update();
+    break;
+case 'delete_assign_teacher':
+    $assignTeachersController->delete();
+    break;
+
+// SCORE MANAGEMENT
+case 'score_entry':
+    $scoreController->entryForm();
+    break;
+case 'store_score':
+    $scoreController->store();
+    break;
+case 'view_scores':
+    $scoreController->viewScores();
+    break;
+case 'edit_score':
+    $scoreController->edit();
+    break;
+case 'update_score':
+    $scoreController->update();
+    break;
+case 'delete_score':
+    $scoreController->delete();
+    break;
+case 'get_student_scores':
+    $scoreController->getStudentScores();
+    break;
+case 'get_class_averages':
+    $scoreController->getClassAverages();
     break;
 
 default:

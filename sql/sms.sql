@@ -6,6 +6,8 @@
 -- Generation Time: Jan 18, 2026 at 10:05 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
+CREATE DATABASE sms;
+USE sms;
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -166,45 +168,7 @@ INSERT INTO `parents` (`id`, `name`, `email`) VALUES
 (29, 'Mason Wright', 'mason.wright@example.com'),
 (30, 'Aria Scott', 'aria.scott@example.com');
 
--- --------------------------------------------------------
-
---
--- Table structure for table `report_cards`
---
-
-CREATE TABLE `report_cards` (
-  `report_id` int(11) NOT NULL,
-  `student_id` int(11) NOT NULL,
-  `school_year_id` int(11) NOT NULL,
-  `term_id` int(11) NOT NULL,
-  `teacher_id` int(11) DEFAULT NULL,
-  `grade_id` int(11) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `comments` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `report_card_details`
---
-
-CREATE TABLE `report_card_details` (
-  `detail_id` int(11) NOT NULL,
-  `report_id` int(11) NOT NULL,
-  `subject_id` int(11) NOT NULL,
-  `total_marks` int(11) NOT NULL,
-  `marks_obtained` int(11) NOT NULL,
-  `subject_grade` varchar(5) DEFAULT NULL,
-  `remarks` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `roles`
---
-
+-- creating tables
 CREATE TABLE `roles` (
   `role_id` int(11) NOT NULL,
   `role_name` varchar(50) NOT NULL,
@@ -261,10 +225,13 @@ CREATE TABLE `school_years` (
 CREATE TABLE `scores` (
   `id` int(11) NOT NULL,
   `student_id` int(11) NOT NULL,
-  `grade_id` int(11) NOT NULL,
-  `subject` varchar(50) DEFAULT NULL,
-  `score` decimal(5,2) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `subject_id` int(11) NOT NULL,
+  `term_id` int(11) NOT NULL,
+  `score` decimal(5,2) NOT NULL,
+  `max_score` decimal(5,2) DEFAULT 100.00,
+  `remarks` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -311,6 +278,7 @@ INSERT INTO `students` (`student_id`, `student_number`, `first_name`, `last_name
 CREATE TABLE `subjects` (
   `subject_id` int(11) NOT NULL,
   `subject_name` varchar(100) NOT NULL,
+  `grade_id` int(11) NOT NULL,
   `total_marks` int(11) NOT NULL DEFAULT 50
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -318,11 +286,11 @@ CREATE TABLE `subjects` (
 -- Dumping data for table `subjects`
 --
 
-INSERT INTO `subjects` (`subject_id`, `subject_name`, `total_marks`) VALUES
-(1, 'Mathematics', 100),
-(2, 'English', 50),
-(3, 'Science', 50),
-(4, 'Social Studies', 50);
+INSERT INTO `subjects` (`subject_id`, `subject_name`, `grade_id`, `total_marks`) VALUES
+(1, 'Mathematics', 1, 100),
+(2, 'English', 1, 50),
+(3, 'Science', 1, 50),
+(4, 'Social Studies', 1, 50);
 
 -- --------------------------------------------------------
 
@@ -674,11 +642,26 @@ ALTER TABLE `report_card_details`
   ADD CONSTRAINT `report_card_details_ibfk_2` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`subject_id`) ON DELETE CASCADE;
 
 --
+-- Constraints for table `scores`
+--
+ALTER TABLE `scores`
+  ADD CONSTRAINT `fk_scores_student` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_scores_subject` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`subject_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_scores_term` FOREIGN KEY (`term_id`) REFERENCES `terms` (`term_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `unique_student_subject_term` UNIQUE (`student_id`, `subject_id`, `term_id`);
+
+--
 -- Constraints for table `students`
 --
 ALTER TABLE `students`
   ADD CONSTRAINT `fk_students_class` FOREIGN KEY (`class_id`) REFERENCES `classes` (`class_id`),
   ADD CONSTRAINT `fk_students_grade` FOREIGN KEY (`grade_id`) REFERENCES `grades` (`grade_id`);
+
+--
+-- Constraints for table `subjects`
+--
+ALTER TABLE `subjects`
+  ADD CONSTRAINT `fk_subjects_grade` FOREIGN KEY (`grade_id`) REFERENCES `grades` (`grade_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `terms`

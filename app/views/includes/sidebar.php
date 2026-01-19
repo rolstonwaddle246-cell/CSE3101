@@ -90,6 +90,12 @@ $current_action = isset($_GET['action']) ? $_GET['action'] : '';
                     <i class="fas fa-fw fa-chalkboard-teacher"></i>
                     <span>Teachers</span></a>
             </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="index.php?action=assign_teachers">
+                    <i class="fas fa-fw fa-chalkboard-teacher"></i>
+                    <span>Assign Teachers</span></a>
+            </li>
             <!-- Divider -->
             <hr class="sidebar-divider">
 

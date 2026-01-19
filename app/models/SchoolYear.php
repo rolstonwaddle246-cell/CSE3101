@@ -34,5 +34,18 @@ class SchoolYear extends Model {
         $stmt->execute(['id' => $id]);
         return $stmt->fetch();
     }
+
+    // REPORTS
+    // Fetch active school years from the database
+    public function getAllSchoolYears() {
+        $stmt = $this->db->prepare("
+            SELECT id, school_year, status
+            FROM school_years
+            ORDER BY 
+            CASE WHEN status='Active' THEN 0 ELSE 1 END, 
+            school_year DESC");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 ?>

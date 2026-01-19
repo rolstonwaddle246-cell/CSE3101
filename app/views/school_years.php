@@ -94,7 +94,7 @@ $columns = ['Year', 'Term', 'Start Date', 'End Date', 'Status', 'Actions'];
 $data = [];
 foreach ($terms as $term) {
     $data[] = [
-        'id' => $term['id'], // keep id for edit/delete
+        'id' => $term['term_id'], // keep id for edit/delete
         'Year' =>  isset($term['school_year']) ? $term['school_year'] : 'Unknown',
         'Term' => $term['term_name'],
         'Start Date' => $term['start_date'],

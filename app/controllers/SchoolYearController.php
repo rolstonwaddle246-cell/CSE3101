@@ -1,6 +1,6 @@
 <?php
     require_once __DIR__ . '/../models/SchoolYear.php';
-    require_once __DIR__ . '/../models/Terms.php';
+    require_once __DIR__ . '/../models/Term.php';
     require_once __DIR__ . '/Controller.php';
 
     class SchoolYearController extends Controller {

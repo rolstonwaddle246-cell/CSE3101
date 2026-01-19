@@ -24,3 +24,6 @@
     <!-- school years and terms management -->
     <script src="assets/js/school_years.js"></script>
     <script src="assets/js/terms.js"></script>
+
+    <!-- Report -->
+    <script src="assets/js/student_report_card.js"></script>

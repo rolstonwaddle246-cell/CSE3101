@@ -1,4 +1,8 @@
 <?php
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
+
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -13,6 +17,7 @@ require_once __DIR__ . '/../app/controllers/ReportCardController.php';
 require_once __DIR__ . '/../app/controllers/AveragePerformanceController.php';
 require_once __DIR__ . '/../app/controllers/SettingController.php';
 require_once __DIR__ . '/../app/controllers/SyllabusProgressController.php';
+require_once __DIR__ . '/../app/controllers/UserController.php';
 
 // Handle AJAX inline edit first
 if (isset($_GET['action']) && $_GET['action'] === 'update_setting') {
@@ -56,6 +61,7 @@ $schoolYearController = new SchoolYearController();
 $termController = new TermController();
 $reportCardController = new ReportCardController();
 $averagePerformanceController = new AveragePerformanceController();
+$userController = new UserController();
 
 switch ($action) {
     case 'login':
@@ -112,6 +118,47 @@ switch ($action) {
         }
         require_once __DIR__ . '/../app/views/teacher_dashboard.php';
         break;
+
+
+    // USERS / MANAGE USERS
+case 'manage_users':  // list all users
+    if (!isset($_SESSION['user_id'])) {
+        header("Location: index.php?action=login");
+        exit();
+    }
+    $userController->listUsers();
+    break;
+case 'create_user':
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $userController->createUser();
+    }
+    break;
+case 'get_user_json':
+    if (!isset($_GET['user_id'])) {
+        echo json_encode(['error' => 'User ID missing']);
+        exit;
+    }
+    $userId = (int)$_GET['user_id'];
+    $user = $userController->fetchUserById($userId);
+    echo json_encode($user);
+    exit;
+case 'update_user':
+    $userController->updateUser();
+    break;
+case 'delete_user':  // handle deletion
+    if (!isset($_SESSION['user_id'])) {
+        header("Location: index.php?action=login");
+        exit();
+    }
+    $userController->deleteUser();
+    break;
+case 'reset_password':  
+    if (!isset($_SESSION['user_id'])) {
+        header("Location: index.php?action=login");
+        exit();
+    }
+    $userController->resetPassword();
+    break;
 
 // SCHOOL YEARS
 case 'school_years':

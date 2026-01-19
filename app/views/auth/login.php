@@ -1,4 +1,39 @@
-<!-- http://localhost/CSE3101/login -->
+<?php
+if (session_status() === PHP_SESSION_NONE) session_start();
+
+// Only process login if form was submitted
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // fetch user from DB
+    $username = $_POST['username'] ?? '';
+    $password = $_POST['password'] ?? '';
+
+    require_once __DIR__ . '/../../models/User.php';
+    $userModel = new User();
+
+// fetch user by username
+$user = $userModel->getByUsername($username);
+
+if ($user && password_verify($password, $user['password'])) {
+    // login success, set session
+    $_SESSION['user'] = [
+        'user_id'    => $user['user_id'],
+        'username'   => $user['username'],
+        'role_name'  => $user['role_name'],
+        'first_name' => $user['first_name'],
+        'last_name'  => $user['last_name']
+    ];
+
+    if ($user['role_name'] === 'admin') {
+        header("Location: index.php?action=admin_dashboard");
+    } else {
+        header("Location: index.php?action=teacher_dashboard");
+    }
+    exit;
+} else {
+    $error = "Invalid username or password";
+}
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

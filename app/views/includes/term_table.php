@@ -1,4 +1,9 @@
 <?php
+session_start(); // Make sure session is started
+
+// Check user role
+$currentUserRole = strtolower($_SESSION['user']['role_name'] ?? '');
+
 if (!isset($id)) {
     $id = '';
 }

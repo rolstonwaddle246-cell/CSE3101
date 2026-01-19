@@ -1,3 +1,4 @@
+<!-- Used at the start of the development of this application -->
 <?php
 require_once __DIR__ . '/../config/Database.php';    
 require_once __DIR__ . '/../app/models/User.php';    

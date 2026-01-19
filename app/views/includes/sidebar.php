@@ -15,7 +15,7 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="admin_dashboard.php">
+                <a class="nav-link" href="charts.html">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -43,17 +43,17 @@
             </div>
 
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="index.php?action=grades">
                     <i class="fas fa-fw fa-graduation-cap"></i>
                     <span>Grades</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="index.php?action=classes">
                     <i class="fas fa-fw fa-chalkboard"></i>
                     <span>Classes</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="index.php?action=subject">
                     <i class="fas fa-fw fa-book"></i>
                     <span>Subjects</span></a>
             </li>
@@ -83,6 +83,12 @@
                     <i class="fas fa-fw fa-chalkboard-teacher"></i>
                     <span>Teachers</span></a>
             </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="index.php?action=assign_teachers">
+                    <i class="fas fa-fw fa-chalkboard-teacher"></i>
+                    <span>Assign Teachers</span></a>
+            </li>
             <!-- Divider -->
             <hr class="sidebar-divider">
 
@@ -93,7 +99,7 @@
             </div>
 
             <li class="nav-item">
-                <a class="nav-link" href="index.php?action=school_years">
+                <a class="nav-link" href="charts.html">
                     <i class="fas fa-fw fa-calendar"></i>
                     <span>School Years & Terms</span></a>
             </li>

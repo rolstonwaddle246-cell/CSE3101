@@ -9,6 +9,40 @@ require_once __DIR__ . '/../app/controllers/AuthController.php';
 require_once __DIR__ . '/../app/controllers/AnnouncementController.php';
 require_once __DIR__ . '/../app/controllers/SchoolYearController.php';
 require_once __DIR__ . '/../app/controllers/TermController.php';
+require_once __DIR__ . '/../app/controllers/ReportCardController.php';
+require_once __DIR__ . '/../app/controllers/AveragePerformanceController.php';
+require_once __DIR__ . '/../app/controllers/SettingController.php';
+require_once __DIR__ . '/../app/controllers/SyllabusProgressController.php';
+require_once __DIR__ . '/../app/controllers/UserController.php';
+require_once __DIR__ . '/../app/controllers/GradesController.php';
+require_once __DIR__ . '/../app/controllers/ClassesController.php';
+require_once __DIR__ . '/../app/controllers/SubjectController.php';
+require_once __DIR__ . '/../app/controllers/AssignTeachersController.php';
+require_once __DIR__ . '/../app/controllers/ScoreController.php';
+
+// Handle AJAX inline edit first
+if (isset($_GET['action']) && $_GET['action'] === 'update_setting') {
+    $data = json_decode(file_get_contents('php://input'), true);
+    if (isset($data['key'], $data['value'])) {
+        $settingController = new SettingController();
+        $settingController->update($data['key'], $data['value']); // echoes JSON & exits
+    } else {
+        echo json_encode(['success' => false]);
+    }
+    exit;
+}
+
+// Handle AJAX for slider updates
+if (isset($_GET['action']) && $_GET['action'] === 'update_syllabus') {
+    $data = json_decode(file_get_contents('php://input'), true);
+    if (isset($data['subject'], $data['value'])) {
+        $controller = new SyllabusProgressController();
+        $controller->update($data['subject'], $data['value']);
+    } else {
+        echo json_encode(['success' => false]);
+    }
+    exit;
+}
 
 // echo "SMS database connected successfully.";
 
@@ -16,11 +50,18 @@ require_once __DIR__ . '/../app/controllers/TermController.php';
 
     $action = $_GET['action'] ?? 'login';
 
-    $authController = new AuthController();
-
-    $announcementController = new AnnouncementController();
-
-    $termController = new TermController();
+$authController = new AuthController();
+$announcementController = new AnnouncementController();
+$schoolYearController = new SchoolYearController();
+$termController = new TermController();
+$reportCardController = new ReportCardController();
+$averagePerformanceController = new AveragePerformanceController();
+$userController = new UserController();
+$gradesController = new GradesController();
+$classesController = new ClassesController();
+$subjectController = new SubjectController();
+$assignTeachersController = new AssignTeachersController();
+$scoreController = new ScoreController();
 
     switch ($action) {
         case 'login':
@@ -87,22 +128,144 @@ require_once __DIR__ . '/../app/controllers/TermController.php';
         $controller->delete();
         break;
 
-        // TERMS
-    case 'store_term':
-        $termController->store();
-        break;
-    case 'update_term':
-        $termController->update();
-        break;
+    // TERMS
+case 'store_term':
+    $termController->store();
+    break;
+case 'update_term':
+    $termController->update();
+    break;
+case 'delete_term':
+    $termController->delete();
+    break;
+case 'fetch_terms':
+    $termModel = new Term();
+    $school_year_id = $_GET['school_year'] ?? 0;
+    $terms = $termModel->getTermsBySchoolYear($school_year_id);
+    echo json_encode($terms);
+    exit();
 
-    case 'delete_term':
-        $termController->delete();
-        break;
 
-// DEFAULT CASE
-        default:
-            echo "Page not found";
-            break;
+// REPORTS
+
+// student report card page
+case 'student_report_card':
+    $reportCardController->index();
+    break;
+case 'search_student':
+    $reportCardController->searchStudent();
+    break;
+case 'get_school_years':
+    $reportCardController->getSchoolYears();
+    break;
+case 'get_terms':
+    $reportCardController->getTerms();
+    break;
+case 'generate_report':
+    $reportCardController->generate();
+    break;
+case 'get_grading_system':
+    $reportCardController->getGradingSystem();
+    break;
+case 'debug':
+    $reportCardController->debug();
+    break;
+
+
+// average performance page
+case 'average_performance':
+    $averagePerformanceController->index();
+    break;
+case 'average_performance_data':
+    $averagePerformanceController->fetchData();
+    break;
+
+// GRADES MANAGEMENT
+case 'grades':
+    $gradesController->index();
+    break;
+case 'store_grade':
+    $gradesController->store();
+    break;
+case 'update_grade':
+    $gradesController->update();
+    break;
+case 'delete_grade':
+    $gradesController->delete();
+    break;
+
+// CLASSES MANAGEMENT
+case 'classes':
+    $classesController->index();
+    break;
+case 'store_class':
+    $classesController->store();
+    break;
+case 'update_class':
+    $classesController->update();
+    break;
+case 'delete_class':
+    $classesController->delete();
+    break;
+
+// SUBJECTS MANAGEMENT
+case 'subjects':
+    $subjectController->index();
+    break;
+case 'store_subject':
+    $subjectController->store();
+    break;
+case 'update_subject':
+    $subjectController->update();
+    break;
+case 'delete_subject':
+    $subjectController->delete();
+    break;
+
+// TEACHER ASSIGNMENT
+case 'assign_teachers':
+    $assignTeachersController->index();
+    break;
+case 'store_assign_teacher':
+    $assignTeachersController->store();
+    break;
+case 'update_assign_teacher':
+    $assignTeachersController->update();
+    break;
+case 'delete_assign_teacher':
+    $assignTeachersController->delete();
+    break;
+
+// SCORE MANAGEMENT
+case 'score_entry':
+    $scoreController->entryForm();
+    break;
+case 'store_score':
+    $scoreController->store();
+    break;
+case 'view_scores':
+    $scoreController->viewScores();
+    break;
+case 'edit_score':
+    $scoreController->edit();
+    break;
+case 'update_score':
+    $scoreController->update();
+    break;
+case 'delete_score':
+    $scoreController->delete();
+    break;
+case 'get_student_scores':
+    $scoreController->getStudentScores();
+    break;
+case 'get_class_averages':
+    $scoreController->getClassAverages();
+    break;
+
+default:
+    if (!isset($_SESSION['user_id'])) {
+        header("Location: index.php?action=login");
+        exit();
     }
 
 

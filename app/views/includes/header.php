@@ -17,4 +17,12 @@
     <!-- icons -->
     <link href='https://cdn.boxicons.com/3.0.6/fonts/basic/boxicons.min.css' rel='stylesheet'>
 
-    
+    <!-- student report card -->
+    <link href="assets/css/student-report-card.css" rel="stylesheet">
+
+
+
+<?php
+require_once __DIR__ . '/../../../config/Database.php'; 
+include __DIR__ . '/dashboard_counts.php'; 
+?>

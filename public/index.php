@@ -10,16 +10,52 @@ require_once __DIR__ . '/../app/controllers/AnnouncementController.php';
 require_once __DIR__ . '/../app/controllers/SchoolYearController.php';
 require_once __DIR__ . '/../app/controllers/TermController.php';
 require_once __DIR__ . '/../app/controllers/ReportCardController.php';
+require_once __DIR__ . '/../app/controllers/AveragePerformanceController.php';
+require_once __DIR__ . '/../app/controllers/SettingController.php';
+require_once __DIR__ . '/../app/controllers/SyllabusProgressController.php';
+
+// Handle AJAX inline edit first
+if (isset($_GET['action']) && $_GET['action'] === 'update_setting') {
+    $data = json_decode(file_get_contents('php://input'), true);
+    if (isset($data['key'], $data['value'])) {
+        $settingController = new SettingController();
+        $settingController->update($data['key'], $data['value']); // echoes JSON & exits
+    } else {
+        echo json_encode(['success' => false]);
+    }
+    exit;
+}
+
+// Handle AJAX for slider updates
+if (isset($_GET['action']) && $_GET['action'] === 'update_syllabus') {
+    $data = json_decode(file_get_contents('php://input'), true);
+    if (isset($data['subject'], $data['value'])) {
+        $controller = new SyllabusProgressController();
+        $controller->update($data['subject'], $data['value']);
+    } else {
+        echo json_encode(['success' => false]);
+    }
+    exit;
+}
 
 // echo "SMS database connected successfully.";
 
-$action = $_GET['action'] ?? 'login';
+$action = $_GET['action'] ?? null;
+if ($action === null) {
+    if (!isset($_SESSION['user_id'])) {
+        header("Location: index.php?action=login");
+        exit();
+    }
+    header("Location: index.php?action=admin_dashboard");
+    exit();
+}
 
 $authController = new AuthController();
 $announcementController = new AnnouncementController();
 $schoolYearController = new SchoolYearController();
 $termController = new TermController();
 $reportCardController = new ReportCardController();
+$averagePerformanceController = new AveragePerformanceController();
 
 switch ($action) {
     case 'login':
@@ -46,6 +82,19 @@ switch ($action) {
         }
         $announcementController->index();
         break;
+
+// HANDLE EDITABLE CARDS
+// case 'update_setting':
+//     $data = json_decode(file_get_contents('php://input'), true);
+//     if (isset($data['key'], $data['value'])) {
+//         $settingController = new SettingController();
+//         $settingController->update($data['key'], $data['value']); // echoes JSON & exits
+//     } else {
+//         echo json_encode(['success' => false]);
+//     }
+//     exit;
+
+
     case 'create_announcement':
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $announcementController->create();
@@ -85,18 +134,23 @@ case 'store_term':
 case 'update_term':
     $termController->update();
     break;
-
 case 'delete_term':
     $termController->delete();
     break;
+case 'fetch_terms':
+    $termModel = new Term();
+    $school_year_id = $_GET['school_year'] ?? 0;
+    $terms = $termModel->getTermsBySchoolYear($school_year_id);
+    echo json_encode($terms);
+    exit();
 
 
 // REPORTS
 
 // student report card page
 case 'student_report_card':
-        $reportCardController->index();
-        break;
+    $reportCardController->index();
+    break;
 case 'search_student':
     $reportCardController->searchStudent();
     break;
@@ -116,9 +170,24 @@ case 'debug':
     $reportCardController->debug();
     break;
 
+
+// average performance page
+case 'average_performance':
+    $averagePerformanceController->index();
+    break;
+case 'average_performance_data':
+    $averagePerformanceController->fetchData();
+    break;
+
 default:
-        echo "Page not found";
-        break;
+    if (!isset($_SESSION['user_id'])) {
+        header("Location: index.php?action=login");
+        exit();
+    }
+
+    http_response_code(404);
+    require_once __DIR__ . '/../app/views/errors/404.php';
+    exit();
 }
 
 ?>

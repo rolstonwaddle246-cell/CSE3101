@@ -42,6 +42,7 @@
         $status = $_POST['status'] ?? null;
 
         $newId = $this->model->create($school_year, $status); 
+        header('Content-Type: application/json');
         echo json_encode(['id' => $newId]);
     }
 }
@@ -53,6 +54,7 @@
         $status = $_POST['status'] ?? null;
 
         if (!$id || !$school_year || !$status) {
+            header('Content-Type: application/json');
             echo json_encode(['success' => false, 'error' => 'Missing required fields']);
             return;
         }
@@ -66,6 +68,7 @@
                 'status' => $status
             ]);
         } else {
+            header('Content-Type: application/json');
             echo json_encode(['success' => false, 'error' => 'Update failed']);
         }
     }

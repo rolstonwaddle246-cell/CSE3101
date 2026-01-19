@@ -15,7 +15,7 @@ class SchoolYear extends Model {
 
     public function create($school_year, $status) {
         $stmt = $this->db->prepare("INSERT INTO school_years (school_year, status) VALUES (:school_year, :status)");
-        return $stmt->execute(['school_year' => $school_year, 'status' => $status]);
+        $stmt->execute(['school_year' => $school_year, 'status' => $status]);
         return $this->db->lastInsertId(); // <-- returns new ID
     }
 

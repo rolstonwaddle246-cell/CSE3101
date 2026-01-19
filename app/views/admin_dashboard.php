@@ -3,7 +3,122 @@
 <html lang="en">
 
 <head>
-    <?php include 'includes/header.php'; ?>
+    <?php 
+        $pageTitle = "SMS - Dashboard"; 
+        include 'includes/header.php'; 
+        require_once __DIR__ . '/includes/dashboard_counts.php';
+
+        require_once __DIR__ . '/../controllers/SettingController.php';
+        $settingController = new SettingController();
+        // Fetch current values from DB
+        $schoolYear = $settingController->get('school_year') ?? '2025/2026';
+        $activeTerm = $settingController->get('active_term') ?? 'Term 2';
+
+        //SLIDERS
+        require_once __DIR__ . '/../controllers/SyllabusProgressController.php';
+        $syllabusController = new SyllabusProgressController();
+        $defaultValues = [
+            'math' => 50,
+            'english' => 40,
+            'science' => 60,
+            'social' => 80
+        ];
+
+        // Fetch values from DB or use default
+        $sliderValues = [];
+        foreach ($defaultValues as $subject => $default) {
+            $value = $syllabusController->get($subject);
+            
+            if ($value === null) {
+                // No row exists in DB yet, insert default
+                $syllabusController->update($subject, $default);
+                $value = $default;
+            }
+            
+            $sliderValues[$subject] = $value;
+        }
+    ?>
+
+<style>
+
+.editable-text {
+    position: relative;
+}
+.editable-text:hover {
+    cursor: pointer;
+    text-decoration: underline dotted;
+}
+.editable-text[contenteditable="true"] {
+    cursor: text;
+    background: #f8f9fc;
+    outline: none;
+}
+/* Hover hint */
+.editable-text:hover::after {
+    content: attr(data-hint);
+    position: absolute;
+    bottom: -22px;
+    left: 0;
+    font-size: 11px;
+    color: #6c757d;
+    white-space: nowrap;
+}
+
+.syllabus-range {
+    width: 100%;
+    margin-top: -12px;
+    opacity: 0;
+    cursor: pointer;
+}
+/* Make the track thicker */
+.syllabus-range {
+    appearance: none;           /* standard property */
+    -webkit-appearance: none;   /* Chrome, Safari */
+    -moz-appearance: none;      /* Firefox */
+    width: 100%;
+    height: 16px;               /* thicker track */
+    background: #e9ecef;
+    border-radius: 8px;
+    outline: none;
+    margin-top: -12px;
+    cursor: pointer;
+}
+/* Slider handle for WebKit browsers (Chrome, Safari) */
+.syllabus-range::-webkit-slider-thumb {
+    appearance: none;           
+    -webkit-appearance: none;
+    width: 28px;  
+    height: 28px;
+    background: #4e73df;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    cursor: pointer;
+    margin-top: -6px; /* centers handle vertically */
+}
+/* Slider handle for Firefox */
+.syllabus-range::-moz-range-thumb {
+    appearance: none;
+    -moz-appearance: none;
+    width: 28px;
+    height: 28px;
+    background: #4e73df;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    cursor: pointer;
+}
+/* Optional hover hint */
+.syllabus-range:hover::after {
+    content: "Slide anywhere on the bar";
+    position: absolute;
+    top: -22px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px;
+    color: #6c757d;
+    white-space: nowrap;
+}
+
+</style>
 </head>
 
 
@@ -34,8 +149,6 @@
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Admin Dashboard</h1>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
                     </div>
 
                     <!-- Content Row -->
@@ -49,7 +162,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                 Students</div>
-                                            <div class="h5 mb-0 font-weight-bold text-white-800">40,000</div>
+                                            <div class="h5 mb-0 font-weight-bold text-white-800"><?= number_format($totalStudentsCount) ?></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-user-graduate fa-2x text-gray-300"></i>
@@ -67,7 +180,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Teachers</div>
-                                            <div class="h5 mb-0 font-weight-bold text-white-800">15,000</div>
+                                            <div class="h5 mb-0 font-weight-bold text-white-800"><?= number_format($totalTeachersCount) ?></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-chalkboard-teacher fa-2x text-gray-300"></i>
@@ -85,7 +198,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
                                                 Parents</div>
-                                            <div class="h5 mb-0 font-weight-bold text-white-800">15,000</div>
+                                            <div class="h5 mb-0 font-weight-bold text-white-800"><?= number_format($totalParentsCount) ?></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-user-friends fa-2x text-gray-300"></i>
@@ -103,7 +216,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                                 Grades</div>
-                                            <div class="h5 mb-0 font-weight-bold text-white-800">1-6</div>
+                                            <div class="h5 mb-0 font-weight-bold text-white-800"><?= htmlspecialchars($gradesDisplay) ?></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-file-alt fa-2x text-gray-300"></i>
@@ -115,7 +228,6 @@
                     </div>
 
                     <!-- Content Row -->
-
                     <div class="row">
 
                         <!-- Area Chart -->
@@ -125,26 +237,15 @@
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                     <h6 class="m-0 font-weight-bold text-primary">Academic Performance</h6>
-                                    <div class="dropdown no-arrow">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                            aria-labelledby="dropdownMenuLink">
-                                            <div class="dropdown-header">Dropdown Header:</div>
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                        </div>
-                                    </div>
                                 </div>
+
                                 <!-- Card Body -->
                                 <div class="card-body">
                                     <div class="chart-area">
                                         <canvas id="myAreaChart"></canvas>
                                     </div>
+                                        <?php require_once __DIR__ . '/includes/dashboard_area_chart.php'; ?>
+        
                                 </div>
                             </div>
                         </div>
@@ -156,30 +257,21 @@
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                     <h6 class="m-0 font-weight-bold text-primary">Students</h6>
-                                    <div class="dropdown no-arrow">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                            aria-labelledby="dropdownMenuLink">
-                                            <div class="dropdown-header">Dropdown Header:</div>
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                        </div>
-                                    </div>
                                 </div>
+
                                 <!-- Card Body -->
                                 <div class="card-body">
-                                    <div class="chart-pie pt-4 pb-2">
-                                        <canvas id="myPieChart"></canvas>
+                                    <div class="chart-pie" style="display: flex; justify-content: center; align-items: center;">
+                                        <canvas id="myPieChart" style="max-width: 250px; max-height: 250px;"></canvas>
                                     </div>
-                                    
+                                    <?php require_once __DIR__ . '/includes/dashboard_pie_chart.php'; ?>
+                                    <div style="text-align:center; margin-bottom:10px;">
+                                        <strong>Total Students: <?= $totalStudents ?></strong>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
 
                     <!-- Content Row -->
@@ -188,35 +280,34 @@
                         <div class="col-lg-6 mb-4">
                             <!-- Project Card Example -->
                             <div class="card shadow mb-4">
-                                <div class="card-header py-3">
+                                <div class="card-header py-3 d-flex justify-content-between align-items-center">
                                     <h6 class="m-0 font-weight-bold text-primary">Syllabus Coverage</h6>
+                                    <button id="undoSyllabus" class="btn btn-sm btn-outline-secondary ">Undo</button>
                                 </div>
+
                                 <div class="card-body">
-                                    <h4 class="small font-weight-bold">Mathematics  <span
-                                            class="float-right">50%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 20%"
-                                            aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <?php
+                                    $subjects = ['math','english','science','social'];
+                                    $colors = ['math'=>'bg-danger','english'=>'bg-warning','science'=>'bg-success','social'=>'bg-info'];
+
+                                    foreach ($subjects as $subject):
+                                        $value = $sliderValues[$subject];
+                                    ?>
+                                    <div class="mb-4 syllabus-item">
+                                        <h4 class="small font-weight-bold">
+                                            <?= ucfirst($subject) ?>
+                                            <span class="float-right percent"><?= $value ?>%</span>
+                                        </h4>
+
+                                        <div class="progress">
+                                            <div class="progress-bar <?= $colors[$subject] ?>" style="width:<?= $value ?>%"></div>
+                                        </div>
+
+                                        <input type="range" class="syllabus-range"
+                                            min="0" max="100" data-key="<?= $subject ?>"
+                                            value="<?= $value ?>">
                                     </div>
-                                    <h4 class="small font-weight-bold">English  <span
-                                            class="float-right">40%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 40%"
-                                            aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <h4 class="small font-weight-bold">Science  <span
-                                            class="float-right">60%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar" role="progressbar" style="width: 60%"
-                                            aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <h4 class="small font-weight-bold">Social Studies <span
-                                            class="float-right">80%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar bg-info" role="progressbar" style="width: 80%"
-                                            aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    
+                                    <?php endforeach; ?>
                                 </div>
                             </div>
                             
@@ -249,7 +340,9 @@
                                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                     Current School Year
                                                 </div>
-                                                <div class="h5 mb-0 font-weight-bold text-gray-800">2025/2026</div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800 editable-text" data-key="school_year"
+                                                data-hint="Double-click to edit"
+                                                ondblclick="enableInlineEdit(this)"><?= htmlspecialchars($schoolYear) ?></div>
                                             </div>
                                             <div class="col-auto">
                                                 <i class="fas fa-calendar-alt fa-2x text-gray-300"></i>
@@ -270,7 +363,10 @@
                                                 </div>
 
                                                 <!-- text editable; do this later -->
-                                                <div class="h5 mb-0 font-weight-bold text-gray-800 editable-term" data-term-id="2" contenteditable="true" onblur="updateTerm(this)">Term 2</div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800 editable-text"
+                                                data-key="active_term"
+                                                data-hint="Double-click to edit"
+                                                ondblclick="enableInlineEdit(this)"><?= htmlspecialchars($activeTerm) ?></div>
                                             </div>
                                             <div class="col-auto">
                                                 <i class="fas fa-book-reader fa-2x text-gray-300"></i>
@@ -301,7 +397,7 @@
                                                     <form method="POST" style="display:inline;" action="index.php?action=delete_announcement">
                                                         <input type="hidden" name="id" value="<?= $announcement['id'] ?>">
                                                         <button type="submit" class="icon-btn text-danger" title="Delete">
-                                                            <i class="fas fa-trash-alt"></i>
+                                                            <i class="fas fa-trash-alt" style="opacity: 0.9;"></i>
                                                         </button>
                                                     </form>
                                                 </div>
@@ -376,26 +472,132 @@
     </a>
 
     <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
-                </div>
-            </div>
-        </div>
-    </div>
+    <?php include 'includes/logout_modal.php'; ?>
 
-    <?php include 'assets/js/scripts.php'; ?>
-    
+<script>
+//editable cards
+function enableInlineEdit(el) {
+    el.contentEditable = "true";
+    el.focus();
+
+    // place cursor at end
+    const range = document.createRange();
+    const sel = window.getSelection();
+    range.selectNodeContents(el);
+    range.collapse(false);
+    sel.removeAllRanges();
+    sel.addRange(range);
+
+    // disable editing when clicking away and save to DB
+    el.addEventListener("blur", () => {
+    el.contentEditable = "false";
+
+    // get key from data-key attribute
+    const key = el.dataset.key;
+    const value = el.textContent.trim();
+
+    // send update to server
+    fetch('index.php?action=update_setting', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ key, value })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (!data.success) {
+            alert('Failed to save. Try again.');
+        }
+    })
+    .catch(err => console.error(err));
+}, { once: true });
+}
+
+
+// SLIDERS
+const sliderHistory = {};
+const changeStack = []; // stack of changes
+
+// Initialize sliders
+document.querySelectorAll('.syllabus-range').forEach(slider => {
+    const key = slider.dataset.key;
+    const container = slider.closest('.syllabus-item');
+    const bar = container.querySelector('.progress-bar');
+    const percent = container.querySelector('.percent');
+
+    // Initialize history array
+    sliderHistory[key] = [slider.value];
+
+    // On input: update bar & text
+    slider.addEventListener('input', () => {
+        bar.style.width = slider.value + '%';
+        percent.textContent = slider.value + '%';
+    });
+
+    // On change: push to stack & save
+    slider.addEventListener('change', () => {
+        const oldValue = sliderHistory[key][sliderHistory[key].length - 1];
+        const newValue = slider.value;
+
+        // push to global change stack
+        changeStack.push({ key, oldValue });
+
+        // update per-slider history
+        sliderHistory[key].push(newValue);
+
+        // send update to DB
+        fetch('index.php?action=update_syllabus', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ subject: key, value: newValue })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (!data.success) alert('Failed to save slider value. Try again.');
+        });
+
+        // show undo button
+        document.getElementById('undoSyllabus').classList.remove('d-none');
+    });
+});
+
+// Undo button: revert **last change only**
+document.getElementById('undoSyllabus').addEventListener('click', () => {
+    if (changeStack.length === 0) return;
+
+    const lastChange = changeStack.pop(); // last change
+    const { key, oldValue } = lastChange;
+
+    const slider = document.querySelector(`.syllabus-range[data-key="${key}"]`);
+    const container = slider.closest('.syllabus-item');
+    const bar = container.querySelector('.progress-bar');
+    const percent = container.querySelector('.percent');
+
+    // restore previous value in UI
+    slider.value = oldValue;
+    bar.style.width = oldValue + '%';
+    percent.textContent = oldValue + '%';
+
+    // update per-slider history
+    sliderHistory[key].push(oldValue);
+
+    // send undone value back to DB
+    fetch('index.php?action=update_syllabus', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ subject: key, value: oldValue })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (!data.success) alert('Failed to save undone slider value.');
+    });
+
+    // hide undo button if stack empty
+    if (changeStack.length === 0) {
+        document.getElementById('undoSyllabus').classList.add('d-none');
+    }
+});
+</script>
+
+<?php include 'assets/js/scripts.php'; ?>
 </body>
 </html>

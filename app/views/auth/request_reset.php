@@ -1,4 +1,13 @@
-<!-- after admin aproves -->
+<?php
+session_start(); // always first line
+
+// optional: get messages from session
+$message = $_SESSION['success_message'] ?? '';
+$error   = $_SESSION['error_message'] ?? '';
+
+// optional: clear them so they don't show again
+unset($_SESSION['success_message'], $_SESSION['error_message']);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

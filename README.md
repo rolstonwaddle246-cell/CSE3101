@@ -3,6 +3,20 @@
 - right now i'm hardcoding 'subject_grade' and 'remarks' in the report_card_details table, whenever i create a record for this table. That will have to change when the Score page (where teachers enter scores) is built. The score pg is suppose to automatically calculate the grade and remarks based on the grading system (i have a table for grading system too). 
 - make the page responsive
 
+# Users
+I took out the dropdown filters not because i was lazy to code them ofc but bc the table arrows basically filter the table already. 
+
+### i updated the Database.php i had based on omar's.
+what Database.php does:
+1.	Connects to MySQL without assuming the database exists.
+2.	Creates the sms database if missing.
+3.	Switches to that database.
+4.	Creates the users table if it doesn’t exist.
+5.	Checks for a superuser (role_id = 2), and inserts one if none exist.
+
+- also i finally got the reset password feature working. Try it out. 
+- i added sessions at the top of some of the view files.
+- The admin functions like adding user and editing doesn't show from the teacher's perspective. 
 ### If this Student Report Card page doesn't work for u, it might be bc of ur db. Like e.g. your db table names should match the ones in the query code (in the controller, models and so on)
 
 ### Improvements to add: 

@@ -1,4 +1,28 @@
-<!-- http://localhost/CSE3101/index.php?action=admin_dashboard -->
+<?php
+// dashboard.php — used for both admin & teacher
+if (session_status() === PHP_SESSION_NONE) session_start();
+
+// Check if user is logged in
+if (empty($_SESSION['user_id'])) {
+    header("Location: index.php?action=login");
+    exit();
+}
+
+// Fetch session info
+$userId   = $_SESSION['user_id'];
+$username = $_SESSION['username'] ?? '';
+$role     = strtolower($_SESSION['role_name'] ?? '');
+
+// Redirect teacher/admin to correct page if this file is accessed incorrectly
+if ($role === 'admin' && ($_GET['action'] ?? '') !== 'admin_dashboard') {
+    header("Location: index.php?action=admin_dashboard");
+    exit();
+} elseif ($role === 'teacher' && ($_GET['action'] ?? '') !== 'teacher_dashboard') {
+    header("Location: index.php?action=teacher_dashboard");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 

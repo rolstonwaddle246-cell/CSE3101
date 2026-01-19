@@ -33,8 +33,8 @@ $current_action = isset($_GET['action']) ? $_GET['action'] : '';
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item <?php if($current_page == 'index.php' && $current_action == '') echo 'active'; ?>">
-                <a class="nav-link" href="charts.html">
+            <li class="nav-item <?php if($current_page == 'index.php' && $current_action == 'manage_users') echo 'active'; ?>">
+                <a class="nav-link" href="index.php?action=manage_users">
                     <i class="fas fa-fw fa-users"></i>
                     <span>Users</span></a>
             </li>
@@ -86,7 +86,7 @@ $current_action = isset($_GET['action']) ? $_GET['action'] : '';
             </div>
 
             <li class="nav-item <?php if($current_page == 'index.php' && $current_action == '') echo 'active'; ?>">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="">
                     <i class="fas fa-fw fa-chalkboard-teacher"></i>
                     <span>Teachers</span></a>
             </li>

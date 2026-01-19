@@ -15,7 +15,7 @@ class SchoolYear extends Model {
 
     public function create($school_year, $status) {
         $stmt = $this->db->prepare("INSERT INTO school_years (school_year, status) VALUES (:school_year, :status)");
-        return $stmt->execute(['school_year' => $school_year, 'status' => $status]);
+        $stmt->execute(['school_year' => $school_year, 'status' => $status]);
         return $this->db->lastInsertId(); // <-- returns new ID
     }
 
@@ -33,6 +33,19 @@ class SchoolYear extends Model {
         $stmt = $this->db->prepare("SELECT * FROM school_years WHERE id = :id");
         $stmt->execute(['id' => $id]);
         return $stmt->fetch();
+    }
+
+    // REPORTS
+    // Fetch active school years from the database
+    public function getAllSchoolYears() {
+        $stmt = $this->db->prepare("
+            SELECT id, school_year, status
+            FROM school_years
+            ORDER BY 
+            CASE WHEN status='Active' THEN 0 ELSE 1 END, 
+            school_year DESC");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
 ?>

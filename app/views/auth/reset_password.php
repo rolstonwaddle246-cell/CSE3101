@@ -1,3 +1,12 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) session_start();
+
+// Must be logged in
+if (empty($_SESSION['user_id'])) {
+    header("Location: index.php?action=login");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +21,7 @@
     <div class="login-wrapper">
         <form action="index.php?action=reset" method="POST">
             <h1>CHANGE YOUR PASSWORD</h1>
-            <p class="reset-msg">Welcome! Since this is your first login, please choose a new password to continue.</p>
+            <p class="reset-msg">Welcome! Please choose a new password to continue.</p>
 
             <?php if (!empty($error)): ?>
                 <p class="text-danger"><?= $error ?></p>

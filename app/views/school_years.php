@@ -94,7 +94,7 @@ $columns = ['Year', 'Term', 'Start Date', 'End Date', 'Status', 'Actions'];
 $data = [];
 foreach ($terms as $term) {
     $data[] = [
-        'id' => $term['id'], // keep id for edit/delete
+        'id' => $term['term_id'], // keep id for edit/delete
         'Year' =>  isset($term['school_year']) ? $term['school_year'] : 'Unknown',
         'Term' => $term['term_name'],
         'Start Date' => $term['start_date'],
@@ -140,24 +140,7 @@ foreach ($terms as $term) {
     </a>
 
     <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
-                </div>
-            </div>
-        </div>
-    </div>
+    <?php include 'includes/logout_modal.php'; ?>
 
 <script>
     window.selectedYearId = <?= $selectedYearId ?? 'null' ?>;

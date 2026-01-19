@@ -238,7 +238,11 @@ CREATE TABLE `scores` (
 -- Dumping data for table `scores`
 --
 
--- Old data removed, new structure requires subject_id and term_id
+INSERT INTO `scores` (`id`, `student_id`, `grade_id`, `subject`, `score`, `created_at`) VALUES
+(1, 1, 1, 'Mathematics', 85.00, '2026-01-18 05:52:16'),
+(2, 2, 1, 'Mathematics', 78.00, '2026-01-18 05:52:16'),
+(3, 3, 2, 'English', 92.00, '2026-01-18 05:52:16'),
+(4, 4, 2, 'Science', 88.00, '2026-01-18 05:52:16');
 
 -- --------------------------------------------------------
 

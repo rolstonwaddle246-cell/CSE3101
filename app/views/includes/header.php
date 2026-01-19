@@ -1,6 +1,6 @@
 <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Admin Dashboard - School Management System</title>
+    <title><?= isset($pageTitle) ? $pageTitle : 'SMS' ?></title>
 
     <!-- Custom fonts for this template-->
     <link href="assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">

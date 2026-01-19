@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../models/Terms.php';
+require_once __DIR__ . '/../models/Term.php';
 require_once __DIR__ . '/Controller.php';
 
 
@@ -83,6 +83,13 @@ class TermController extends Controller {
         }
     }
 
+public function fetchTerms() {
+    $school_year_id = $_GET['school_year'] ?? 0;
+    $terms = $this->model->getTermsBySchoolYear($school_year_id);
+
+    header('Content-Type: application/json');
+    echo json_encode($terms);
+}
 
 }
 

@@ -58,6 +58,7 @@ $(document).ready(function() {
         }
 
         $.post('index.php?action=store_school_year', { school_year, status }, function(response) {
+            console.log('New school year ID:', response.id);
             var newId = response.id || 'new';
 
             row.html(`

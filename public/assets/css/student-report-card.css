@@ -1,0 +1,24 @@
+.report-title {
+    background-color: #95dcf8b4;
+}
+
+.value-underline {
+    border-bottom: 1px solid #979696;
+    display: inline-block;
+    margin-left: 10px;
+    width: 120px;
+}
+
+.report-table th, 
+.report-table td {
+    white-space: nowrap; /* keeps content on one line */
+}
+
+.report-table .subject-col {
+    width: 60%;   /* or adjust to your preference */
+}
+
+.report-table td:not(.subject-col),
+.report-table th:not(.subject-col) {
+    width: 1%;    /* shrink to fit content */
+}

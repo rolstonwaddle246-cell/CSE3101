@@ -41,5 +41,10 @@ class AnnouncementController extends Controller {
         exit();
     }
 
+    // for teacher dashboard
+    public function getAllAnnouncements() {
+        return $this->announcementModel->getAll();
+    }
+
 }
 ?>
